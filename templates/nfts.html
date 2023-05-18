@@ -1,0 +1,92 @@
+{% extends "coins_general.html" %}
+
+{% block tittle %}
+NFTS
+{% endblock %}
+
+{% block content %}
+
+<h1 class="text-center mt-2">NFTS</h1>
+<div class="container">
+  <div class="row my-3">
+    {% for nft in nfts %}
+      <div class="col-6 my-3 mx-0">
+        <div class="card border shadow-lg">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-5">
+                <img src="{{ nft[-1] }}" class="card-img-top my-2" style="width: 200px; height: 200px;">
+                <p class="card-text my-2" style="display: -webkit-box; -webkit-line-clamp: 7; -webkit-box-orient: vertical; overflow: hidden;">{{ nft.description }}</p>
+              </div>
+              <div class="col-7 ">
+                <h5 class="card-title text-center">{{ nft.name }}</h5>
+                <h6>{{ nft.symbol | safe }}</h6>
+                <div class="container text-center">
+                  <div class="row">
+                    <div class="col-6">
+                      <h6>Floor</h6>
+                      <p class="h4">
+                        
+                        
+                        {{ "$%.0f"|format(nft.floor_price) }}
+
+                        <span class="{% if nft.floor_price_in_usd_24h_percentage_change > 0 %}text-success{% else %}text-danger{% endif %} h6">
+                          ({{ nft.floor_price_in_usd_24h_percentage_change | round(2, 'common') }}%)
+                        </span>
+                      </p>
+                    </div>
+                    
+                    <div class="col-6">
+                      <h6>MCap:</h6>
+                      <p class="h4">${{ nft.market_cap | round}}</p>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-6">
+                      <h6>Volume:</h6>
+                      <p class="font-weight-bold">${{ nft.volume_24h | round }}</p>
+                    </div>
+                    <div class="col-6">
+                      <h6>Unique Addresses:</h6>
+                      <p class="font-weight-bold">
+                        {{ nft.number_of_unique_addresses | round }}
+                        <span class="{% if nft.number_of_unique_addresses_24h_percentage_change > 0 %}text-success{% else %}text-danger{% endif %}">
+                          ({{ nft.number_of_unique_addresses_24h_percentage_change | round(2, 'common') }}%)
+                        </span>
+                    </p>
+
+                      
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-6">
+                      <h6>Total Supply:</h6>
+                      <p class="font-weight-bold">{{ nft.total_supply | round }}</p>
+                    </div>
+                    <div class="col-6">
+                      <h6>Chain:</h6>
+                      <p class="font-weight-bold">{{ nft.asset_platform_id | capitalize }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              
+            </div>
+          </div>
+          <div class="card-body text-center ">
+            <a href="https://etherscan.io/address/{{nft.contract_address}}" class="btn btn-primary">See Contract</a>
+          </div>
+          
+        </div>
+      </div>
+      {% if loop.index % 2 == 0 %}
+        </div>
+        <div class="row">
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+
+{% endblock %}

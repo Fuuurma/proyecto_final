@@ -1,0 +1,241 @@
+{% extends "coins_general.html" %}
+<!-- El titulo no fnciona -->
+{% block tittle %}
+TVL DAPPS 
+{% endblock %}
+
+{% block content %}
+
+  <div class="row mx-5 text-center">
+    <div class="col-6  my-5 ">
+    <table class="table table-sm table-responsive table-bordered table-hover shadow-lg bg-body-tertiary rounded" id="general_metrics_home" style="height: 1000px; width: 100%;">
+      <thead class="thead-light">
+        <tr>
+          <th>Protocol</th>
+          <th>TVL</th>
+          <th>Market cap</th>
+          <th>Volume</th>
+          <th>TVL Change</th>
+          <th>Price Change</th>
+          <th>Category</th>
+          <th>Chain</th>
+          
+
+        </tr> 
+      </thead>
+      <tbody>
+
+        {% for dapp in tvl_dapps_today %}
+        <tr>
+          <td> 
+            <div class="row justify-content-center">
+              <div class="col-4 ml-1">
+                <img src="{{ dapp.image}}" width="40" height="40">
+                <p class="fs-6 font-weight-lighter">#{{ dapp.market_cap_rank}}</p> 
+            
+              </div>
+              <div class="col-7">
+                <p class="font-weight-bold"> {{ dapp.name }} </p>
+              </div>
+            
+            </div>
+            
+          
+          </td>
+
+
+          {% if dapp.tvl == None %}
+          <td>None</td>
+          {% else %}
+          <td>${{ dapp.tvl| round }}m</td>
+          {% endif %}
+
+          {% if dapp.market_cap == None %}
+          <td>None</td>
+          {% else %}
+          <td>${{ dapp.market_cap| round }}m</td>
+          {% endif %}
+
+          {% if dapp.total_volume == None %}
+          <td>None</td>
+          {% else %}
+          <td>${{ dapp.total_volume| round }}m</td>
+          {% endif %}
+
+          {% if dapp.change_1d == None %}
+          <td>None</td>
+          {% elif dapp.change_1d > 0 %}
+          <td class="text-success font-weight-bold">{{ dapp.change_1d | round (2, 'common')}}%</td>
+          {% else %}
+          <td class="text-danger font-weight-bold">{{ dapp.change_1d| round (2, 'common')}}%</td>
+          {% endif %}
+
+          {% if dapp.Price_Change_24h == None %}
+          <td>None</td>
+          {% elif dapp.Price_Change_24h > 0 %}
+          <td class="text-success font-weight-bold">{{ dapp.Price_Change_24h | round (2, 'common')}}%</td>
+          {% else %}
+          <td class="text-danger font-weight-bold">{{ dapp.Price_Change_24h| round (2, 'common')}}%</td>
+          {% endif %}
+
+          <td class="font-weight-bold">{{ dapp.category }}</td>
+
+          <td>{{ dapp.chain }}</td>
+
+          
+
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="col-6 my-5">
+
+    <table class="table table-sm table-responsive table-bordered table-hover shadow-lg bg-body-tertiary rounded" id="general_metrics_home" style="height: 1000px; width: 100%;">
+      <thead class="thead-light">
+        <tr>
+          <th>name</th>
+          <th>Daily Volume</th>
+          <th>1d Change</th>
+          <th>7d Change</th>
+          <th>1m Change</th>
+          <th>Total 7d</th>
+          <th>Total 30d</th>
+          <th>Total All Time</th>
+        </tr> 
+      </thead>
+      <tbody>
+        {% for dex in dex_volume %}
+        <tr>
+          <td> 
+            <img src="{{ dex.logo }}" width="20" height="20">
+            <b>{{ dex.name }}</b></td>
+            
+          <td> <b>${{ dex.dailyVolume | round }}m </b></td>
+
+          {% if dex.change_1d == None %}
+          <td>None</td>
+          {% elif dex.change_1d > 0 %}
+          <td class="text-success font-weight-bold">{{ dex.change_1d | round (2, 'common')}}%</td>
+          {% else %}
+          <td class="text-danger font-weight-bold">{{ dex.change_1d| round (2, 'common')}}%</td>
+          {% endif %}
+          
+          {% if dex.change_7d == None %}
+          <td>None</td>
+          {% elif dex.change_7d > 0 %}
+          <td class="text-success font-weight-bold">{{ dex.change_7d | round (2, 'common')}}%</td>
+          {% else %}
+          <td class="text-danger font-weight-bold">{{ dex.change_7d| round (2, 'common')}}%</td>
+          {% endif %}
+          
+          {% if dex.change_1m == None %}
+          <td>None</td>
+          {% elif dex.change_1m > 0 %}
+          <td class="text-success font-weight-bold">{{ dex.change_1m | round (2, 'common')}}%</td>
+          {% else %}
+          <td class="text-danger font-weight-bold">{{ dex.change_1m| round (2, 'common')}}%</td>
+          {% endif %}
+          
+          {% if dex.total7d == None %}
+          <td>None</td>
+          {% else %}
+          <td >${{ dex.total7d| round }}m</td>
+          {% endif %}
+          
+          {% if dex.total30d == None %}
+          <td>None</td>
+          {% else %}
+          <td >${{ dex.total30d| round }}m</td>
+          {% endif %}
+          
+          {% if dex.totalAllTime == None %}
+          <td>None</td>
+          {% else %}
+          <td >${{ dex.totalAllTime| round }}m</td>
+          {% endif %}
+
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    
+  </div>
+
+
+  </div>
+
+
+  <div class="row">
+    <div class="col-6">
+      <div id="graph">{{ dapps_tvl_plot | safe }}</div>
+    </div>
+
+    
+    <div class="col-6">
+      <div id="graph">{{ dapps_tvl_pie | safe }}</div>
+    </div>
+    
+  </div>
+   
+
+
+
+    
+<!-- ///////////////////////////////////////////////////////7 -->
+
+
+    
+      <div class="row-10">
+        <div class="container-fluid" id="">
+        <div class="col">
+      <h2>Top 100 TVL protocols</h2>
+      {% if tvl_dapps is not none %}
+      <table class="table table-sm table-responsive table-bordered table-hover shadow-lg bg-body-tertiary rounded" id="general_metrics_home" style="height: 1000px; width: 100%;">
+        <thead>
+            <tr>
+                
+                {% for col in tvl_dapps.columns %}
+                <th>{{ col }}</th>
+            {% endfor %}
+                
+
+                {% for col in tvl_dapps.columns %}
+                    <th>{{ col }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for index, row in tvl_dapps.iterrows() %}
+                <tr>
+                    
+                    {% for col in tvl_dapps.columns %}
+                        <td>{{ row[col] }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+      {% else %}
+          <p>No TVL data found</p>
+      {% endif %}
+  </div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  {% endblock %}

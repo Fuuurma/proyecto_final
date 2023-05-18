@@ -1,0 +1,78 @@
+{% extends "coins_general.html" %}
+
+{% block tittle %}
+News
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-6 border">
+    <div id="graph">{{ tvl_graph | safe }}</div>
+  </div>
+
+  <div class="col-6 border">
+    <div id="graph">{{ dapps_pie | safe }}</div>
+  </div>
+</div>
+
+
+
+<div class="row">
+  <div class="col-6 border">
+    <div id="graph">{{ categories_bar | safe }}</div>
+  </div>
+
+  <div class="col-6 border">
+    <div id="graph">{{ coins_bar_chart | safe }}</div>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-6 border">
+    <div id="graph">{{ coins_heatmap | safe }}</div>
+  </div>
+
+  <div class="col-6 border">
+    <div id="graph">{{ coins_group_bar_chart | safe }}</div>
+  </div>
+</div>
+
+
+
+
+<div class="row">
+  <div class="col-6 border">
+    <div id="graph">{{ top10_stables | safe }}</div>
+  </div>
+
+  <div class="col-6 border">
+    <div id="graph">{{ top10_chains | safe }}</div>
+  </div>
+</div>
+
+  
+  
+  
+  <div id="myPlot">
+    <div id="graph">{{ tvl_historic | safe }}</div>
+  </div>
+
+
+
+  <div class="row">
+    <div class="col-6 border">
+      <div id="graph">{{ coins_log_scatter_plot | safe }}</div>
+    </div>
+  
+    <div class="col-6 border">
+      <div id="graph">{{ btc_candle | safe }}</div>
+    </div>
+  </div>
+
+  
+
+
+  
+{% endblock %}

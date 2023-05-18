@@ -1,0 +1,150 @@
+{% extends "coins_general.html" %}
+
+{% block tittle %}
+Stablecoins
+{% endblock %}
+
+ 
+
+{% block content %}
+
+<h1 class="text-center mt-4">Stablecoins</h1>
+
+<div class="row m-5 text-center justify-content-center">
+  <div class="col-8">
+    <div class="table-responsive shadow-lg rounded shadow-lg rounded" id="general_metrics_home">
+      <table class="table table-hover table-bordered table-striped text-center">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Market Cap</th>
+            <th>Circulating</th>
+            <th>Price</th>
+            <th>24h</th>
+            <th>24%</th>
+            <th>7d</th>
+            <th>7d %</th>
+            <th>30d</th>
+            <th>30d %</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for s in stables_general %}
+          <tr>
+            <td>
+              <div class="row text-center pl-4">
+              #{{ s.id }} 
+              <p class="font-weight-bold text-center pl-2">{{ s.name }}</p>
+            </div>
+            </td>
+
+            {% if s.market_cap == None %} <td> None </td>{% else %}
+            <td>{{s.market_cap | round}}</td>
+            {% endif %}
+
+            {% if s.circulating == None %} <td> None </td>{% else %}
+            <td>{{s.circulating | round }}</td>
+            {% endif %}
+
+            {% if s.price == None %} <td> None </td>{% else %}
+            <td>{{s.price | round (3, 'common')}}</td>
+            {% endif %}
+
+
+            {% if s.circulatingPrevDay == None %} <td> None </td>{% else %}
+            <td>{{s.circulatingPrevDay | round}}</td>
+            {% endif %}
+
+            {% if s.circulating == None or s.circulatingPrevDay == None or s.circulatingPrevDay == 0 %}
+            <td>None</td>
+            {% else %}
+            {% set percentage_change = ((s.circulating - s.circulatingPrevDay) / s.circulatingPrevDay) * 100 %}
+            {% if percentage_change > 0 %}
+            <td class="text-success font-weight-bold">{{ percentage_change | round(2) }}%</td>
+            {% elif percentage_change < 0 %} <td class="text-danger font-weight-bold">{{ percentage_change | round(2) }}%</td>
+            {% else %} <td class="font-weight-bold">{{ percentage_change | round(2) }}%</td>
+            {% endif %}
+            {% endif %}
+
+            {% if s.circulatingPrevWeek == None %} <td> None </td>{% else %}
+            <td>{{s.circulatingPrevWeek | round}}</td>
+            {% endif %}
+
+            {% if s.circulatingPrevWeek == None or s.circulatingPrevWeek == 0 %}
+            <td>None</td>
+            {% else %}
+            {% set percentage_change_week = ((s.circulating - s.circulatingPrevWeek) / s.circulatingPrevWeek) * 100 %}
+            {% if percentage_change_week > 0 %}
+            <td class="text-success font-weight-bold">{{ percentage_change_week | round(2) }}%</td>
+            {% elif percentage_change_week < 0 %}
+            <td class="text-danger font-weight-bold">{{ percentage_change_week | round(2) }}%</td>
+            {% else %}<td class="font-weight-bold">{{ percentage_change_week | round(2) }}%</td>
+            {% endif %}
+            {% endif %}
+
+            {% if s.circulatingPrevMonth == None %} <td> None </td>{% else %}
+            <td>{{s.circulatingPrevMonth | round}}</td>
+            {% endif %}
+
+            {% if s.circulatingPrevMonth == None or s.circulatingPrevMonth == 0 %}
+            <td>None</td>
+            {% else %}
+            {% set percentage_change_month = ((s.circulating - s.circulatingPrevMonth) / s.circulatingPrevMonth) * 100 %}
+            {% if percentage_change_month > 0 %}
+            <td class="text-success font-weight-bold">{{ percentage_change_month | round(2) }}%</td>
+            {% elif percentage_change_month < 0 %}
+            <td class="text-danger font-weight-bold">{{ percentage_change_month | round(2) }}%</td>
+            {% else %}<td class="font-weight-bold">{{ percentage_change_month | round(2) }}%</td>
+            {% endif %}
+            {% endif %}
+
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="col-3">
+    <div class="table-responsive">
+      <table class="table table-sm table-hover  table-striped text-center" id="general_metrics_home">
+        <thead>
+          <tr>
+            <th>Day</th>
+            <th>Circulating Value</th>
+            <th>Unreleased</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for s in stables %}
+          <tr>
+            <td>{{s.Date}}</td>
+
+            {% if s.Total_Circulating_USD == None %} <td> None </td>{% else %}
+            <td>{{s.Total_Circulating_USD | round}}</td>
+            {% endif %}
+            {% if s.Total_Unreleased == None or 0 %} <td> 0 </td>{% else %}
+            <td>{{s.Total_Unreleased | round}}</td>
+            {% endif %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    
+  </div>
+</div>
+
+
+
+
+
+{% endblock %}
+
+stables_general
+stables
+
+
+
+
+
+        

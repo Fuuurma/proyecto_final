@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}Crypto Home{% endblock %}</title>
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+
+
+  </head>
+  <!-- --------------------------------------------------------------------------------------------------------- -->
+  <body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand font-weight-bold ml-5" href="#"><span class="font-weight-bold h3" style="color: #fbb845;">C</span>rypto'<span class="font-weight-bold h3" style="color: #6566a7;">S</span></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+          <ul class="navbar-nav">
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('tvl') }}">TVL</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('tvl_chains') }}">Chains</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('tvl_dapps') }}">DAPPS</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('coins') }}">Coins</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('stablecoins') }}">Stablecoins</a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('nfts') }}">NFTs</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('contact') }}">Contact Us</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('other') }}">Other</a>
+            </li>
+
+          </ul>
+        </div>
+    </nav>
+
+
+    {% block content %}
+
+
+    
+
+    {% block first_box %}
+
+    <div class="container-fluid mb-5 p-5" id="home_show">
+      <div class="row">
+        <div class="col-9 border shadow">
+          
+            <div> {{ plot | safe}}</div> 
+            
+          
+        </div>
+
+        <div class="col-3 d-flex flex-column justify-content-between text-center">
+            <div class="row">
+              <div class="col-4 border border-primary rounded m-2 p-1 bg-body-tertiary rounded border shadow">
+                <h5>Total Market Cap</h5>
+
+                {% for data in actual_mcap_vol %}
+                <p class="font-weight-bold">${{data.market_cap_sum | round}}M</p>
+                
+                {% if data.Price_Change_24h_median > 0 %}
+                <p class="text-success font-weight-bold">({{data.Price_Change_24h_median | round(2,'common')}}%)</p>
+                {% elif data.Price_Change_24h_median < 0 %}
+                <p class="text-danger font-weight-bold">({{data.Price_Change_24h_median | round(2,'common')}}%)</p>
+                {% endif %}
+              </div>
+              <div class="col-4 border border-primary rounded m-2 p-1 shadow">
+                <h5>TVL</h5>
+                {% for tvl in actual_tvl %}
+                <p class="font-weight-bold">${{tvl.totalLiquidityUSD | round }}M</p>
+                {% if tvl.pct_change_yesterday > 0 %}
+                <p class="text-success font-weight-bold">({{tvl.pct_change_yesterday | round (2, 'common')}}%)</p>
+                {% elif tvl.pct_change_yesterday < 0 %}
+                <p class="text-danger font-weight-bold">({{tvl.pct_change_yesterday | round (2, 'common')}}%)</p>
+                {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-4 border border-primary rounded m-2 p-1 shadow">
+                <h5>Stables</h5>
+                <p class="font-weight-bold">${{ actual_stables | round }}m</p>
+              </div>
+              <div class="col-4 border border-primary rounded m-2 p-1 shadow">
+                <h5>Dex Volume</h5>
+                
+                <p class="font-weight-bold">${{actual_vol.vol[0] | round}}m</p>
+                
+              </div>
+
+            </div>
+            <div class="row">
+              <div class="col-4 border border-primary rounded m-2 p-1 shadow">
+                <h5>Dominance</h5>
+
+                {% for pct in dominance %}
+                <div class="col-4">
+                  <div class="row">
+                  <h6 class="d-flex">{{ pct['name'] }}</h6> {{ pct['market_cap_dominance'] | round(2, 'common') }}%
+                </div>
+                </div>
+              {% endfor %}
+              </div>
+              <div class="col-4 border border-primary rounded m-2 p-1 shadow">
+                <h5>Total Volume</h5>
+                <p>${{data.total_volume_sum | round}}M</p>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+          <div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+    {% endblock %}
+    
+
+
+    {% block grid %}
+    
+      
+        <div class="row  align-items-center text-center font-weight-bold m-5">
+          <div class="col-4 p-2 mx-0">
+            <div class="card mb-3 shadow-lg bg-body-tertiary rounded shadow-lg bg-body-tertiary rounded border border-secondary rounded">
+              <div class="card-body">
+                
+                <h3 class="text-center">Coins by Price Change</h3>
+                <h4 class="text-center">24h</h4>
+                <div class="row">
+                <div class="col-6">
+                    <ul class="list-group">
+                      {% for coin in top_coins_24h %}
+
+                    <li class="list-group-item">
+                      <img src="{{ coin[1] }}" width="40" height="40">
+                      <b>{{ coin.name }}</b>
+                     
+
+                      {% if coin.Price_Change_24h > 0 %}
+                    <p class="text-success  m-0">{{ coin.Price_Change_24h | round (2, 'common') }}%</p>
+                      {% else %}
+                      <p class="text-danger font-weight-bold">{{ coin.Price_Change_24h | round (2, 'common') }}%</p>
+                    {% endif %}
+                  </li>
+                    {% endfor %}
+                    </ul>
+                  </div>
+                    <div class="col-6">
+                    <ul class="list-group">
+                      {% for coin in botom_coins_24h %}
+                      <li class="list-group-item">
+                        <img src="{{ coin[1] }}" width="40" height="40">
+                        <b>{{ coin.name }}</b>
+                        
+                        {% if coin.Price_Change_24h > 0 %}
+                        <p class="text-success font-weight-bold m-0">{{ coin.Price_Change_24h | round (2, 'common') }}%</p>
+                        {% else %}
+                        <p class="text-danger font-weight-bold">{{ coin.Price_Change_24h | round (2, 'common') }}%</p>
+                        {% endif %}
+                      </li>
+                    {% endfor %}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              </div>
+              </div>
+          
+          <div class="col-4 p-2 mx-0">
+            <div class="card mb-3 shadow-lg bg-body-tertiary rounded">
+              <div class="border border-secondary rounded">
+              <div class="card-body">
+               
+                <h3 class="text-center">Chains by TVL Change</h3>
+                <h4 class="text-center">24h</h4>
+                <div class="row">
+                <div class="col-6">
+                <ul class="list-group">
+                  {% for chain in top_chains_24h %}
+                  <li class="list-group-item font-weight-bold">{{top_chains_24h.index[loop.index-1]}} 
+                    <p class="text-success"> {{chain}}% </p>
+                  </li>
+                  {% endfor %}
+                </ul>
+              </div>
+              <div class="col-6">
+                <ul class="list-group">
+                  {% for chain in botom_chains_24h %}
+                  <li class="list-group-item font-weight-bold">{{top_chains_24h.index[loop.index-1]}} 
+                    <p class="text-danger"> {{chain}}% </p>
+                  </li>
+                  {% endfor %}
+                </ul>
+              </div>
+              </div>
+              </div>
+            </div>
+            </div>
+          </div>
+
+          <div class="col-4 p-2 mx-0">
+            <div class="card mb-3 shadow-lg bg-body-tertiary rounded shadow-lg bg-body-tertiary rounded border border-secondary rounded">
+              <div class="card-body">
+                <h3 class="text-center">Dapps by TVL Change</h3>
+                <h4 class="text-center">24h</h4>
+                <div class="row">
+                  <div class="col-6 font-weight-bold">
+                  <ul class="list-group">
+                    {% for dapp in top_dapps_24h %}
+                    <li class="list-group-item"> <b>{{dapp.name}} </b> 
+                  <p class="text-success"> {{dapp.change_1d | round (2, 'common') }}% </p> 
+                  </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+                <div class="col-6">
+                  <ul class="list-group">
+                    {% for dapp in botom_dapps_24h %}
+                    <li class="list-group-item"> <b>{{dapp.name}} </b> 
+                   <p class="text-danger"> {{dapp.change_1d | round (2, 'common')}}% </p>
+                  </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        
+        <div class="row align-items-center text-center font-weight-bold m-5" id="coins_change_overtime">
+            <div class="col-4">
+              <div class="card mb-3 shadow-lg bg-body-tertiary rounded border border-secondary rounded">
+                <div class="card-body">
+                  <h4 class="text-center">7d</h4>
+                  <div class="row">
+                  <div class="col-6">
+                    <ul class="list-group">
+                  {% for coin in top_coins_7d %}
+                  <li class="list-group-item">
+                    <img src="{{ coin[1] }}" width="40" height="40">
+                    <b>{{ coin.name }}</b>
+                    
+                    {% if coin.Price_Change_7d > 0 %}
+                    <p class="text-success font-weight-bold m-0">{{ coin.Price_Change_7d | round (2, 'common') }}%</p>
+                      {% else %}
+                      <p class="text-danger font-weight-bold">{{ coin.Price_Change_7d | round (2, 'common') }}%</p>
+                    {% endif %}
+                </li>
+                  {% endfor %}
+                </ul>
+                </div>
+                <div class="col-6">
+                  <ul class="list-group">
+                    {% for coin in botom_coins_7d %}
+                    <li class="list-group-item">
+                      <img src="{{ coin[1] }}" width="40" height="40">
+                      <b>{{ coin.name }}</b>
+                     
+                      {% if coin.Price_Change_7d > 0 %}
+                      <p class="text-success font-weight-bold m-0">{{ coin.Price_Change_7d | round (2, 'common') }}%</p>
+                      {% else %}
+                      <p class="text-danger font-weight-bold">{{ coin.Price_Change_7d | round (2, 'common') }}%</p>
+                      {% endif %}
+                   </li>
+                  {% endfor %}
+                  </ul>
+              </div>
+            </div>
+            </div>
+            </div>
+            </div>
+
+
+
+            <div class="col-4">
+              <div class="card mb-3 shadow-lg bg-body-tertiary rounded border border-secondary rounded">
+                <div class="card-body">
+                 
+                  <h4 class="text-center">7d</h4>
+                  <div class="row">
+                    <div class="col-6">
+                    <ul class="list-group">
+                      {% for chain in top_chains_7d %}
+                  <li class="list-group-item font-weight-bold"> <p class=""> {{top_chains_7d.index[loop.index-1]}}</p> 
+                    
+                    <p class="text-success"> {{chain}}% </p>
+                  </li>
+                  {% endfor %}
+                    </ul>
+                  </div>
+                  <div class="col-6">
+                    <ul class="list-group">
+                      {% for chain in botom_chains_7d %}
+                  <li class="list-group-item font-weight-bold">{{botom_chains_7d.index[loop.index-1]}} 
+                    <p class="text-danger"> {{chain}}% </p>
+                  </li>
+                  {% endfor %}
+                    </ul>
+                  </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="card mb-3 shadow-lg bg-body-tertiary rounded border border-secondary rounded">
+                <div class="card-body">
+            
+                  <h4 class="text-center">7d</h4>
+                  <div class="row">
+                    <div class="col-6">
+                    <ul class="list-group">
+                      {% for dapp in top_dapps_7d %}
+                    <li class="list-group-item"> <b>{{dapp.name}} </b> 
+                  <p class="text-success"> {{dapp.change_7d | round (2, 'common')}}% </p> 
+                  </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+                <div class="col-6">
+                  <ul class="list-group">
+                    {% for dapp in botom_dapps_7d %}
+                    <li class="list-group-item"> <b>{{dapp.name}} </b> 
+                  <p class="text-danger"> {{dapp.change_7d | round (2, 'common')}}% </p> 
+                  </li>
+                    {% endfor %}
+                    </ul>
+                  </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- //////////////////////////////////7 -9 ///////////////////////////////////////////////////// -->
+
+        <div class="row align-items-center text-center font-weight-bold m-5" id="coins_change_overtime">
+          <div class="col-4">
+            <div class="card mb-3 shadow-lg bg-body-tertiary rounded border border-secondary rounded">
+              <div class="card-body">
+                <h4 class="text-center">1 Month</h4>
+                <div class="row">
+                  <div class="col-6">
+                    <ul class="list-group">
+                {% for coin in top_coins_30d %}
+                <li class="list-group-item">
+                  <img src="{{ coin[1] }}" width="40" height="40">
+                  <b>{{ coin.name }}</b>
+                  
+                  {% if coin.Price_Change_30d > 0 %}
+                    <p class="text-success font-weight-bold m-0">{{ coin.Price_Change_30d | round (2, 'common') }}%</p>
+                      {% else %}
+                      <p class="text-danger font-weight-bold">{{ coin.Price_Change_30d | round (2, 'common') }}%</p>
+                    {% endif %}
+                
+              </li>
+                {% endfor %}
+              </ul>
+              </div>
+              <div class="col-6">
+                <ul class="list-group">
+                  {% for coin in botom_coins_30d %}
+                  <li class="list-group-item">
+                    <img src="{{ coin[1] }}" width="40" height="40">
+                    <b>{{ coin.name }}</b>
+                    
+                    {% if coin.Price_Change_30d > 0 %}
+                    <p class="text-success font-weight-bold m-0">{{ coin.Price_Change_30d | round (2, 'common') }}%</p>
+                    {% else %}
+                    <p class="text-danger font-weight-bold">{{ coin.Price_Change_30d | round (2, 'common') }}%</p>
+                    {% endif %}
+                  </li>
+                {% endfor %}
+                </ul>
+              </div>
+            </div>
+          </div>
+          </div>
+          </div>
+
+          <div class="col-4">
+            <div class="card mb-3 shadow-lg bg-body-tertiary rounded border border-secondary rounded">
+              <div class="card-body">
+                <h4 class="text-center">1 Month</h4>
+                <div class="row">
+                  <div class="col-6">
+                  <ul class="list-group">
+                    {% for chain in top_chains_7d %}
+                  <li class="list-group-item font-weight-bold">{{top_chains_30d.index[loop.index-1]}} 
+                    <p class="text-success"> {{chain}}% </p>
+                  </li>
+                  {% endfor %}
+                    </ul>
+                  </div>
+                  <div class="col-6">
+                    <ul class="list-group">
+                      {% for chain in botom_chains_7d %}
+                  <li class="list-group-item font-weight-bold">{{botom_chains_30d.index[loop.index-1]}} 
+                    <p class="text-danger"> {{chain}}% </p>
+                  </li>
+                  {% endfor %}
+                  </ul>
+                </div>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+
+          <div class="col-4">
+            <div class="card mb-3 shadow-lg bg-body-tertiary rounded border border-secondary rounded">
+              <div class="card-body">
+                <h4 class="text-center">Top DEX - Daily Volume</h4>
+                <div class="row">
+                  <div class="col-6">
+                  <ul class="list-group">
+                  
+                    {% for dex in top_dex_24h %}
+                    <li class="list-group-item">
+                      <img src="{{ dex.logo }}" width="40" height="40">
+                      {{dex.name}}
+                      <p class="text-success">${{dex.dailyVolume | round}}m</p> 
+                    </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+                <div class="col-6">
+                  <ul class="list-group">
+                    {% for dex in botom_dex_24h %}
+                    <li class="list-group-item">
+                      <img src="{{ dex.logo }}" width="40" height="40">
+                      {{dex.name}}
+                      <p class="text-danger">${{dex.dailyVolume | round (2, 'common')}}m </p> 
+                    </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+        
+
+<!-- ///////////////////// 7-9 //////////////////////////////////////////////////////////////// -->
+
+
+        <div class="row align-items-center text-center font-weight-bold m-5" id="coins_change_overtime">
+          <div class="col-4">
+            <div class="card mb-3 shadow-lg bg-body-tertiary rounded border border-secondary rounded">
+              <div class="card-body">
+                <h4 class="text-center">200 Days</h4>
+                <div class="row">
+                  <div class="col-6">
+                    <ul class="list-group">
+                {% for coin in top_coins_200d %}
+                <li class="list-group-item">
+                  <img src="{{ coin[1] }}" width="40" height="40">
+                  <b>{{ coin.name }}</b>
+                 
+                
+                {% if coin.Price_Change_200d > 0 %}
+                    <p class="text-success font-weight-bold m-0">{{ coin.Price_Change_200d | round (2, 'common') }}%</p>
+                      {% else %}
+                      <p class="text-danger font-weight-bold">{{ coin.Price_Change_200d | round (2, 'common') }}%</p>
+                    {% endif %}
+              </li>
+              {% endfor %}
+            </ul>
+            </div>
+            <div class="col-6">
+              <ul class="list-group">
+                {% for coin in botom_coins_200d %}
+                <li class="list-group-item">
+                  <img src="{{ coin[1] }}" width="40" height="40">
+                  <b>{{ coin.name }}</b>
+                 
+                  {% if coin.Price_Change_200d > 0 %}
+                <p class="text-success font-weight-bold">{{ coin.Price_Change_200d | round(2,'common')  }}%</p>
+                {% else %}
+                <p class="text-danger font-weight-bold">{{ coin.Price_Change_200d | round(2,'common')  }}%</p>
+                {% endif %}
+              </li>
+              {% endfor %}
+              </ul>
+            </div>
+          </div>
+          </div>
+          </div> 
+        </div>
+        <div class="col-4">
+          <div class="card mb-3 shadow-lg bg-body-tertiary rounded border border-secondary rounded">
+            <div class="card-body">
+              <h4 class="text-center">DEX 7d Vol</h4>
+              <div class="row">
+                <div class="col-6">
+                <ul class="list-group">
+                  {% for dex in top_dex_7d %}
+                    <li class="list-group-item">
+                      <img src="{{ dex.logo }}" width="40" height="40">
+                      {{dex.name}}
+                      <p class="text-success">${{dex.total7d | round}}m </p> 
+                    </li>
+                    {% endfor %}
+                </ul>
+              </div>
+              <div class="col-6">
+                <ul class="list-group">
+                  {% for dex in botom_dex_7d %}
+                    <li class="list-group-item">
+                      <img src="{{ dex.logo }}" width="40" height="40">
+                      {{dex.name}}
+                      <p class="text-danger">${{dex.total7d | round (2, 'common')}}m </p> 
+                    </li>
+                    {% endfor %}
+                </ul>
+              </div>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+
+        <div class="col-4">
+          <div class="card mb-3 shadow-lg bg-body-tertiary rounded border border-secondary rounded">
+            <div class="card-body">
+              <h4 class="text-center">DEX 30d Vol</h4>
+              <div class="row">
+                <div class="col-6">
+                <ul class="list-group">
+                  {% for dex in top_dex_30d %}
+                    <li class="list-group-item">
+                      <img src="{{ dex.logo }}" width="40" height="40">
+                      {{dex.name}}
+                      <p class="text-success">${{dex.total30d | round}}m </p> 
+                    </li>
+                    {% endfor %}
+                </ul>
+              </div>
+              <div class="col-6">
+                <ul class="list-group">
+                  {% for dex in botom_dex_30d %}
+                    <li class="list-group-item">
+                      <img src="{{ dex.logo }}" width="40" height="40">
+                      {{dex.name}}
+                      <p class="text-danger">${{dex.total30d | round (2, 'common')}}m </p> 
+                    </li>
+                    {% endfor %}
+                </ul>
+              </div>
+              </div>
+          
+        </div>
+      </div>
+      </div>
+   
+    
+    
+      {% endblock %}
+
+      
+   
+      {% block table_box %}
+
+      
+    
+      <table class="table table-sm table-hover table-striped text-center shadow mt-5 shadow-lg" id="general_metrics_home">
+        <thead class="border border-dark">
+          <tr>
+            
+            <th>Coin</th>
+            <th>Current Price</th>
+            <th>Market Cap</th>
+            <th>Fully Diluted Valuation</th>
+            <th>Total Volume</th>
+            <th>Circulating Supply</th>
+            <th>Total Supply</th>
+            <th>Max Supply</th>
+            <th>ATH</th>
+            <th>Price Change 24h</th>
+            <th>Price Change 7d</th>
+            <th>Price Change 30d</th>
+            <th>Price Change 200d</th>
+            <th>Price Change 1Y</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          {% for coin in coins_general_home %}
+            <tr>
+              <td>
+                <div class="row">
+                  <div class="col">
+                    <div class="container">
+                      
+
+                      <img src="{{ coin.image }}" width="40" height="40">                                          
+                    
+                      <p class="pl-0 ml-0"> #{{ coin.market_cap_rank }}<b class="ml-2">{{ coin.name }}</b> </p>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            
+              <td>${{ coin.current_price | round(2, 'common') }}</td>
+              <td>${{ coin.market_cap | round(1, 'common') }}m</td>
+
+  
+    <td>{% if coin.fully_diluted_valuation == None %}None{% else %}${{ coin.fully_diluted_valuation | round(1, 'common') }}m{% endif %}</td>
+
+
+    <td>{% if coin.total_volume == None %}None{% else %}${{ coin.total_volume | round(1, 'common') }}m{% endif %}</td>
+    <td>{% if coin.circulating_supply == None %}None{% else %}{{ (coin.circulating_supply/1000000) | round(1, 'common') }}M{% endif %}</td>
+    <td>{% if coin.total_supply == None %}None{% else %}{{ (coin.total_supply/1000000) | round (1, 'common')}}M{% endif %}</td>
+    <td>{% if coin.max_supply == None %}None{% else %}{{ (coin.max_supply/1000000) | round (1, 'common')}}M{% endif %}</td>
+    <td>{% if coin.to_ATH_pct == None %}None{% else %}{{ coin.to_ATH_pct | round(2, 'common') }}%{% endif %}</td>
+
+
+        <td>
+      {% if coin.Price_Change_24h is none %}
+        None
+      {% elif coin.Price_Change_24h > 0 %}
+        <p class="text-success font-weight-bold">{{ coin.Price_Change_24h | round(2, 'common') }}%</p>
+      {% else %}
+        <p class="text-danger font-weight-bold">{{ coin.Price_Change_24h | round(2, 'common') }}%</p>
+      {% endif %}
+    </td>
+    <td>
+      {% if coin.Price_Change_7d is none %}
+        None
+      {% elif coin.Price_Change_7d > 0 %}
+        <p class="text-success font-weight-bold">{{ coin.Price_Change_7d | round(2, 'common') }}%</p>
+      {% else %}
+        <p class="text-danger font-weight-bold">{{ coin.Price_Change_7d | round(2, 'common') }}%</p>
+      {% endif %}
+    </td>
+    <td>
+      {% if coin.Price_Change_30d is none %}
+        None
+      {% elif coin.Price_Change_30d > 0 %}
+        <p class="text-success font-weight-bold">{{ coin.Price_Change_30d | round(2, 'common') }}%</p>
+      {% else %}
+        <p class="text-danger font-weight-bold">{{ coin.Price_Change_30d | round(2, 'common') }}%</p>
+      {% endif %}
+    </td>
+    <td>
+      {% if coin.Price_Change_200d is none %}
+        None
+      {% elif coin.Price_Change_200d > 0 %}
+        <p class="text-success font-weight-bold">{{ coin.Price_Change_200d | round(2, 'common') }}%</p>
+      {% else %}
+        <p class="text-danger font-weight-bold">{{ coin.Price_Change_200d | round(2, 'common') }}%</p>
+      {% endif %}
+    </td>
+    <td>
+      {% if coin.Price_Change_1Y is none %}
+        None
+      {% elif coin.Price_Change_1Y > 0 %}
+        <p class="text-success font-weight-bold">{{ coin.Price_Change_1Y | round(2, 'common') }}%</p>
+      {% else %}
+        <p class="text-danger font-weight-bold">{{ coin.Price_Change_1Y | round(2, 'common') }}%</p>
+      {% endif %}
+    </td>
+
+            </tr>
+            {% endfor %}
+
+        </tbody>
+      </table>
+    </div>
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+
+<div class="container d-flex justify-content-center align-items-center">
+  <button type="button" class="btn btn-outline-primary shadow-lg bg-body-tertiary rounded">See all Coins!</button>  
+</div>
+
+<div class="container shadow-lg bg-body-tertiary rounded" id="home_plot_div" style="height: 1000px;">
+  <div class="row"> 
+    <div class="col">
+      <div id="graph1">{{ coins_bar_chart | safe }}</div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <div id="graph2">{{ coins_heatmap | safe }}</div>
+    </div>
+  </div>
+
+
+</div>
+</div>
+</div>
+
+
+
+
+
+{% endblock %}
+
+
+{% endblock %}
+
+
+{% block boton_subir %} <!-- chatgpt -->
+    <button onclick="scrollToTop()" id="scrollBtn" title="Scroll to Top">↑</button>
+
+    
+    <script>
+      window.onscroll = function() {
+        scrollFunction();
+      };
+    
+      function scrollFunction() {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+          document.getElementById("scrollBtn").style.display = "block";
+        } else {
+          document.getElementById("scrollBtn").style.display = "none";
+        }
+      }
+    
+      function scrollToTop() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+      }
+    </script>
+    {% endblock %}
+
+
+
+<!-- Footer ---------------------------------------------------------------- -->
+<footer class="mt-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 d-flex flex-column align-items-center">
+          <h5>Data</h5>
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('tvl') }}">TVL</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('tvl_chains') }}">Chains</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('tvl_dapps') }}">DAPPS</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('coins') }}">Coins</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('stablecoins') }}">Stablecoins</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('nfts') }}">NFTs</a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-4 d-flex flex-column align-items-center">
+          <h5>News & stories</h5>
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Live Feeds</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Magazines</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Twitter</a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-4 d-flex flex-column align-items-center">
+          <h5>About Us</h5>
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('contact') }}">Contact Us</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('other') }}">Other</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Privacy Policy</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Terms and Conditions</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <p>&copy; 2023 My Website. All Rights Reserved.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNVQ8vc"
+      crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"></script>
+  </body>
+</html>
+
