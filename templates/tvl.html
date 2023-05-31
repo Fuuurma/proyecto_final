@@ -1,0 +1,263 @@
+{% extends "home.html" %}
+
+{% block title %} TVL {% endblock %}
+
+{% block content %}
+
+{% block first_box %}
+
+
+<div class="container">
+  <div class="row" style="width: 100px; justify-content: center; margin-left: 500px;">
+    <div class="col-10 mt-5 mb-2 d-flex justify-content-center">
+      <div class="border border-success shadow-lg bg-body-tertiary rounded">
+        
+          <div id="graph">{{ tvl_graph | safe }}</div>
+        
+      </div>
+    </div>
+    </div>
+    
+
+    
+
+    
+  
+  <div class="row justify-content-center">
+    <div class="col-9">
+      <table class="table table-sm table-bordered text-center shadow-lg bg-body-tertiary rounded shadow-lg bg-body-tertiary rounded">
+        <thead>
+          <tr class="bg-secondary">
+            <th>24h</th>
+            <th>7d</th>
+            <th>30d</th>
+            <th>90d</th>
+            <th>1y</th>
+            <th>Actual</th>
+            <th>To ATH</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>  
+            {% for pct in tvl_pct %}   
+
+            {% if pct.pct_change_yesterday > 0 %}
+            <td class="text-success font-weight-bold"> {{ pct.pct_change_yesterday | round(2, 'common')}}% </td>
+            {% else %}
+                <td class="text-danger font-weight-bold">{{ pct.pct_change_yesterday | round(2, 'common')}}%</td>
+            {% endif %}
+
+            {% if pct.pct_change_7days > 0 %}
+            <td class="text-success font-weight-bold"> {{ pct.pct_change_7days | round(2, 'common')}}% </td>
+            {% else %}
+                <td class="text-danger font-weight-bold">{{ pct.pct_change_7days | round(2, 'common')}}%</td>
+            {% endif %}
+            
+            {% if pct.pct_change_30days > 0 %}
+            <td class="text-success font-weight-bold"> {{ pct.pct_change_30days | round(2, 'common')}}% </td>
+            {% else %}
+                <td class="text-danger font-weight-bold">{{ pct.pct_change_30days | round(2, 'common')}}%</td>
+            {% endif %}
+            
+            {% if pct.pct_change_90days > 0 %}
+            <td class="text-success font-weight-bold"> {{ pct.pct_change_90days | round(2, 'common')}}% </td>
+            {% else %}
+                <td class="text-danger font-weight-bold">{{ pct.pct_change_90days | round(2, 'common')}}%</td>
+            {% endif %}
+            
+            {% if pct.pct_change_1y > 0 %}
+            <td class="text-success font-weight-bold"> {{ pct.pct_change_1y | round(2, 'common')}}% </td>
+            {% else %}
+                <td class="text-danger font-weight-bold">{{ pct.pct_change_1y | round(2, 'common')}}%</td>
+            {% endif %}
+            
+            {% endfor %}
+
+
+            {% for tvl in actual_tvl %}
+            <td class="font-weight-bold">${{tvl.totalLiquidityUSD | round }}m</td>
+            {% set _tvl = tvl.totalLiquidityUSD %}
+            {% endfor %}
+
+            {% for tvl in tvl_ath %}
+            <td class="font-weight-bold">${{ tvl.totalLiquidityUSD | round }}m </td>
+            {% endfor %}
+
+          </tr>
+         
+
+          
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="row d-flex justify-content-center">
+  <div class="col-5 my-5">
+    <h1 class="text-center">DAPPS TVL</h1>
+        <div class="table-responsive shadow-lg bg-body-tertiary rounded shadow-lg bg-body-tertiary rounded" id="general_metrics_home">
+          <table class="table table-hover table-bordered table-striped text-center">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Category</th>
+                <th>TVL</th>
+                <th>Change 1d</th>
+                <th>Change 7d</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for dapp in dapps_tvl %}
+              
+              <tr>
+                <td>{{ dapp.index+1}} <b>{{ dapp.name }} </b> </td>
+                <td>{{ dapp.category }}</td>
+                <td class="font-weight-bold">{{ dapp['tvl'] | round (2, 'common') }}</td>
+                {% if dapp.change_1d == None %} <td>None</td>
+
+                {% elif dapp.change_1d > 0 %}
+                <td class="text-success font-weight-bold">{{ dapp.change_1d | round (2, 'common')}}%</td>
+                {% else %}
+                <td class="text-danger font-weight-bold">{{ dapp.change_1d | round (2, 'common')}}%</td>
+                {% endif %}
+
+                {% if dapp.change_7d == None %}
+                <td> None</td>
+                
+                
+                {% elif dapp.change_7d > 0 %}
+                <td class="text-success font-weight-bold">{{ dapp.change_7d | round (2, 'common')}}%</td>
+                {% else %}
+                <td class="text-danger font-weight-bold">{{ dapp.change_7d | round (2, 'common')}}%</td>
+                {% endif %}
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    
+  
+  
+  <div class="col-4 my-5">
+    <h1 class="text-center">TVL Historic</h1>
+    <div class="table-responsive shadow-lg bg-body-tertiary rounded shadow-lg bg-body-tertiary rounded" id="general_metrics_home">
+      <table class="table table-hover table-bordered table-striped text-center" id="general_metrics_home">
+        <thead class="thead-light">
+          <tr>
+            <th>Date</th>
+            <th>TVL</th>
+            <th>MoM % change</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+  
+          {% for coin in tvl_historic %}
+          
+          
+          <tr> 
+            <td><b>{{ coin.date.strftime('%Y-%m-%d') }}</b></td>
+            <td class="font-weight-bold">{{ coin.totalLiquidityUSD | round(2, 'common') }}</td>
+            <td>0%</td>
+          </tr>
+        {% endfor %}
+        
+
+
+        
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+  
+  
+  <div class="row">
+    <div class="col">
+      <table class="table table-sm table-hover table-bordered table-striped text-center" id="general_metrics_home">
+        <thead class="thead-light">
+          <tr>
+            <th>Category</th>
+            <th>TVL</th>
+            <th># Protocols</th>
+            <th>Avg TVL</th>
+            <th>Median TVL</th>
+            <th>Major Dapp</th>
+            <th>TVL</th>
+            <th>Dominance</th>
+            <th>Chain</th>
+            <th>1d %</th>
+            <th>7d %</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for c in categories %}
+          <tr>
+            <td>
+              #{{ c.index+1}}
+              <b>{{ c.category }} </b>
+            </td>
+            <td class="font-weight-bold">${{ c.tvl | round(2,'common') }}m</td>
+            <td> {{ c.protocols }}</td>
+            <td>${{ c.avg_tvl | round(2,'common') }}m</td>
+            <td>${{ c.median_tvl | round(2,'common') }}m</td>
+            <td class="font-weight-bold">{{ c.name }}</td>
+            <td class="font-weight-bold">${{ c.tvl_protocol | round(2,'common')}}m</td>
+            {% if c.dominance == None %}
+            <td>None</td>
+            {% else %}
+            <td>{{ (c.dominance) | round(2, 'common') *100 }}%</td>
+            {% endif %}
+            <td>{{ c.chain }}</td>
+
+            {% if c.change_1d > 0 %}
+            <td class="text-success font-weight-bold">{{ c.change_1d | round(2,'common')}}%</td>
+            {% else %}
+            <td class="text-danger font-weight-bold">{{ c.change_1d | round(2,'common') }}%</td>
+            {% endif %}
+
+            {% if c.change_7d == None %}
+            <td>None</td>
+            {% elif c.change_7d > 0 %}
+            <td class="text-success font-weight-bold">{{ c.change_7d | round(2,'common') }}%</td>
+            {% else %}
+            <td class="text-danger font-weight-bold">{{ c.change_7d | round(2,'common') }}%</td>
+            {% endif %}
+
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+  <div class="container">
+    <div class="row"> 
+      <div class="col-12 shadow-lg bg-body-tertiary rounded">
+        <div id="graph">{{ categories_bar | safe }}</div>
+      </div>
+    </div>
+  </div>
+    
+  
+  
+
+
+{% endblock %}
+  
+
+{% block grid %}
+<!-- Nothing -->
+{% endblock %}
+
+
+{% block table_box %}
+
+  {% endblock %}
+
+  {% endblock %}

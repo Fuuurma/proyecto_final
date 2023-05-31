@@ -1,0 +1,177 @@
+{% extends "home.html" %}
+
+
+{% block title %} Coins General {% endblock %}
+
+
+{% block content %}
+  {% block first_box %} 
+  {% endblock %}
+
+  {% block grid %}
+  
+
+  
+    
+
+
+    
+
+
+  {% endblock %}
+
+  {% block table_box %}
+  <div class="container-fluid text-center">
+    <div class="row mt-5" id="coins_change_overtime">
+        {% for btc in other_btc %}
+        <div class="col-4">
+            <div class="card mb-3">
+                <div class="card-body shadow-lg bg-body-tertiary rounded shadow-lg bg-body-tertiary rounded border border-secondary rounded">
+                    <div class="d-flex align-items-start">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card_image">
+                                    <img src="{{btc.image}}" alt="btc logo" width="80" height="80">
+                                </div>
+                                <div class="card_name ml-2">
+                                    <h5 class="mb-0">{{btc.name}}</h5> <h6 class="mb-0">{{ btc.symbol | upper }} - ${% if btc.current_price < 100 %}{{ btc.current_price | round (2, 'common') }} {%else%} {{ btc.current_price | round}} {% endif %}</h6>
+                                </div>
+                                
+
+                                <table class="table table-sm mt-2">
+                                  <thead>
+                                    <tr>
+                                      <th>Market Cap</th>
+                                      <th>TVL</th>
+                                      <th>Volume</th>  
+                                    </tr>
+                                  </thead>
+
+                                
+                                  <tbody>
+                                    <tr>
+                                      <td>${{btc.market_cap | round(0, 'common')}}m</td>
+                                      <td>$22B</td>
+                                      <td>${{btc.total_volume | round(0, 'common')}}m</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+
+                                
+                                {% if btc.total_supply == None %}
+                                <div class="row m-3 border rounded-pill border-primary  text-center font-weight-bold text-dark" id="progres_bar"> 0%
+                                  <div id="supply_bar_div" style="width: 0%; color: white;"> </div>
+                                </div>
+                                
+                                
+                                {% else %}
+                                <div class="row m-3 border rounded-pill border-primary" id="progres_bar">
+                                  <div id="supply_bar_div" style="width: {{ (btc.circulating_supply / btc.total_supply) * 100 }}%">     
+                                  <b style="color: white;">{{ ((btc.circulating_supply / btc.total_supply) * 100) | round(1, 'common') }}% </b>
+                                  </div>
+                                </div>
+                                {% endif %}
+
+                                
+                                <div class="row">
+                                  <div class="col">Circulating: {{btc.circulating_supply | round(0, 'common')}}</div>
+                                  {% if btc.total_supply == None %}
+                                  <div class="col">Total Supply: None</div>
+                                  {% else %}
+                                  <div class="col">Supply: {{btc.total_supply | round(0, 'common')}}</div>
+                                  {% endif %}
+
+                                </div>
+                    
+                                
+                                <div class=" border rounded alert-primary  mt-2 p-0 px-0 pr-0">
+                                    {{ charting[loop.index-1] | safe}}
+                                </div>
+                                
+                                
+
+                                <div class="container">
+                                  <div class="row mt-3 ">
+                                      <div class="col mb-3 mt-3">
+                                          <div class="d-flex justify-content-between align-items-center p-3 border rounded">
+                                              {% for period, value in {'24h': btc.Price_Change_24h, '7d': btc.Price_Change_7d, '30d': btc.Price_Change_30d, '200d': btc.Price_Change_200d, '1y': btc.Price_Change_1Y}.items() %}
+                                              <div class="text-center">
+                                                  <p class="mb-0">{{ period }}</p>
+                                                  {% if value == None %}
+                                                  <p>None</p>
+                                                  {% elif value > 0 %}
+                                                  <p class="text-success font-weight-bold ">{{ value | round(2, 'common') }}%</p>
+                                                  {% else %}
+                                                  <p class="text-danger font-weight-bold">{{ value | round(2, 'common') }}%</p>
+                                                  {% endif %}
+                                              </div>
+                                              {% endfor %}
+                                              <div class="text-center">
+                                                <p class="mb-0">ATH</p>
+                                                <p> <b>{{btc.to_ATH_pct| round(2, 'common')}}%</b></p>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+
+                                        
+                                        
+                                     
+                                    
+                                  </div>
+                                  <div class="container mb-3">
+                                    <div class="row">
+                                      <div class="col">
+                                        <div class="d-flex justify-content-between align-items-center p-3 border rounded">
+                                          <a href="https://example.com" target="_blank" class="text-decoration-none">
+                                            <div class="text-center">
+                                              <i class="bi bi-globe"></i>
+                                              <p class="mb-0">Web</p>
+                                            </div>
+                                          </a>
+                                          <a href="https://twitter.com/example" target="_blank" class="text-decoration-none">
+                                            <div class="text-center">
+                                              <i class="bi bi-twitter"></i>
+                                              <p class="mb-0">Twitter</p>
+                                            </div>
+                                          </a>
+                                          <a href="https://etherscan.io/token" target="_blank" class="text-decoration-none">
+                                            <div class="text-center">
+                                              <i class="bi bi-file-earmark-code"></i>
+                                              <p class="mb-0">Etherscan</p>
+                                            </div>
+                                          </a>
+                                        </div>
+                                      </div>
+                                      </div>
+                                      </div>   
+
+                                
+                                    </div>
+                                  </div>
+                            </div>
+                        </div>
+                    </div>
+              
+           
+        
+        {% endfor %}
+   
+
+
+
+
+  {% endblock %}
+
+{% endblock %}
+
+
+
+            
+
+            
+
+            
+
+            

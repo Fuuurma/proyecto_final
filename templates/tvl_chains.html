@@ -1,0 +1,53 @@
+{% extends "coins_general.html" %}
+
+{% block tittle %}
+Chains
+{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center mt-5">
+  <div class="col-8 text-center"> 
+    <h2>Chains</h2>
+    <div class="col-12 border">{{chains_plot|safe}}</div>
+
+    <div class="col-12 border">{{chains_pct_plot|safe}}</div>
+    
+    <div class="col-12 border">{{chains_tvl_mcap|safe}}</div>
+
+  </div>
+
+  <div class="col-3 text-center">
+    <table class="table-responsive shadow-lg bg-body-tertiary rounded" id="general_metrics_home">
+      <thead class="thead-light">
+        <tr>
+          <th>Chain</th>
+          <th>TVL</th>
+          <th>1d</th>
+          <th>7d</th>
+          <th>30d</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for chain in tvl_chains %}
+        <tr>
+          <td><b>{{ chain.name }}</b> {{ chain.tokenSymbol}}</td>
+          <td class="font-weight-bold">${{ chain.tvl | round (2, 'common') }}m</td>
+
+          {% for pct in chains_pct %}
+            <td>{{ pct[loop.index] }}</td>  
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    
+
+</div>
+</div>
+
+
+{% endblock %}
+
+
+

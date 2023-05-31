@@ -1,0 +1,29 @@
+{% extends "coins_general.html" %}
+
+{% block tittle %}
+Contact Us
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5 border p-5 h-25 w-50 shadow-lg p-3 mb-5 bg-body-tertiary rounded">
+    <form>
+      <div class="mb-3">
+        <div class="h1">Know More!</div>
+        <div class="form-text mb-3">And keep up to date.</div>
+        
+        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="Email" placeholder="Email Address:">
+        
+      </div>
+      <div class="mb-3">
+        <input type="text" class="form-control" id="exampleInputPassword1" name="message" placeholder="Message:">
+      </div>
+      <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+        <label class="form-check-label" for="exampleCheck1">Receive Information</label>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+
+{% endblock %}
